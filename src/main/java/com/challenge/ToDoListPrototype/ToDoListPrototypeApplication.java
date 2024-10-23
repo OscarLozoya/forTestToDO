@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.validation.annotation.Validated;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -94,6 +95,8 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 		}while(insertMore);
 
 		System.out.println("Task List description:"+tasksList.toString());
+		taskService.saveTaskOnList(tasksList);
+		System.out.println("Tasks Saved");
 		/*System.out.println("Task description:");
 		String task = scan.nextLine();
 		String saveResponse= taskService.saveNewTask(task).toString();
@@ -108,15 +111,11 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 		TaskEntity result =  taskService.getTask(tskId);
 		if(result!= null){
 			TextPresentationUtils.editTaskTemplateText(result.getDescription());
-			/*System.out.println("Current description:\n" +
-					result.getDescription() +
-					"\nEnter new description:");*/
 			String newDescription = scan.nextLine();
 			result.setDescription(newDescription);
 			taskService.updateTask(result);
-
 		}
-
+		
 
 	}
 
@@ -128,9 +127,40 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 	}
 
 	public void printItems(){
-		System.out.println("Print Items Option");
-		TextPresentationUtils.presentDataList( taskService.getAllTaskText(), ",");
+		String responseMenu;
+		boolean printMenu = true;
+		do{
+			TextPresentationUtils.createConsoleTitle("SHOW ITEMS OPTIONS");
+			System.out.println("Show task order by \n" +
+					"Item Id Ascend (Press IA)\n" +
+					"Item Id Descend (Press ID)\n"+
+					"Date Ascend (Press DA)\n" +
+					"Descend (Press DD)\n" +
+					"Main menu (Press X)");
+			responseMenu = scan.nextLine();
+			if(InputValidation.isValidMenuOption( responseMenu, InputValidation.MENU_PRINT_REGEX, false)){
+				switch(responseMenu){
+					case "IA":
+						TextPresentationUtils.presentDataList( taskService.getAllTaskText2(), ",");
+						break;
+					case "ID":
+						TextPresentationUtils.presentDataList( taskService.getAllTaskText3(), ",");
+						break;
+					case "DA":
+						TextPresentationUtils.presentDataList( taskService.getAllTaskText4(), ",");
+						break;
+					case "DD":
+						TextPresentationUtils.presentDataList( taskService.getAllTaskText5(), ",");
+						break;
+					case "X":
+						printMenu=false;
+						break;
+				}
+			}
+
+		}while(printMenu);
 	}
+
 	public void printAllItems(){
 		TextPresentationUtils.presentDataList( taskService.getAllTaskText(), ",");
 	}

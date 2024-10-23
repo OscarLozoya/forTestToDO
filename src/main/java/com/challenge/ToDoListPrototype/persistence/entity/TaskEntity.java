@@ -41,4 +41,10 @@ public class TaskEntity {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
+    public TaskEntity(){}
+    public TaskEntity(String taskDescription, LocalDateTime date){
+        this.description = taskDescription;
+        this.creationDate = date;
+    }
 }

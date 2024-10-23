@@ -27,7 +27,29 @@ public class TaskService {
 
     public List<String> getAllTaskText(){
         List<String> tasks = new ArrayList<>();
-        taskRepository.findAll().forEach(ts ->tasks.add(ts.getIdTask()+","+ts.getDescription()+","+ts.getCreationDate()));
+        taskRepository.findAll().forEach(task ->tasks.add(formatTaskText(task)));
+        return tasks;
+    }
+
+    public List<String> getAllTaskText2(){
+        List<String> tasks = new ArrayList<>();
+        taskRepository.findAllByOrderByIdTaskAsc().forEach(task ->tasks.add(formatTaskText(task)));
+        return tasks;
+    }
+
+    public List<String> getAllTaskText3(){
+        List<String> tasks = new ArrayList<>();
+        taskRepository.findAllByOrderByIdTaskDesc().forEach(task ->tasks.add(formatTaskText(task)));
+        return tasks;
+    }public List<String> getAllTaskText4(){
+        List<String> tasks = new ArrayList<>();
+        taskRepository.findAllByOrderByCreationDateAsc().forEach(task ->tasks.add(formatTaskText(task)));
+        return tasks;
+    }
+
+    public List<String> getAllTaskText5(){
+        List<String> tasks = new ArrayList<>();
+        taskRepository.findAllByOrderByCreationDateDesc().forEach(task ->tasks.add(formatTaskText(task)));
         return tasks;
     }
 
@@ -38,6 +60,14 @@ public class TaskService {
         taskEntity.setCreationDate(LocalDateTime.now());
         return taskRepository.save(taskEntity);
     }
+    public void saveTaskOnList(List<String> tasks){
+        List<TaskEntity> tasksToSave = new ArrayList<>();
+        tasks.forEach(task -> {
+            tasksToSave.add(new TaskEntity(task, LocalDateTime.now()));
+        });
+        taskRepository.saveAll(tasksToSave);
+    }
+    //for only one operation per time
     public TaskEntity saveNewTask(String taskDescription){
         TaskEntity task = new TaskEntity();
         task.setDescription(taskDescription);
@@ -53,8 +83,11 @@ public class TaskService {
         taskRepository.deleteById(taskId);
         return true;
     }
+
     public boolean taskExist(int taskId){
         return taskRepository.existsById(taskId);
     }
-
+    private String formatTaskText(TaskEntity task){
+        return task.getIdTask()+","+task.getDescription()+","+task.getCreationDate();
+    }
 }
