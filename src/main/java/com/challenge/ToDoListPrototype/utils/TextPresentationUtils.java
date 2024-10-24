@@ -20,12 +20,12 @@ public class TextPresentationUtils {
             });
         }
         else
-            System.out.println("NO DATA");
+           createConsoleTitle("NO DATA");
         System.out.println(String.format("%s","-".repeat(CONSOLE_LENGTH)));
     }
 
-    public static void editTaskTemplateText(String currentTask){
-        System.out.println("Current description:\n" +
+    public static void editTaskTemplateText(int currentId,String currentTask){
+        System.out.println("Task ID: "+currentId+" Current description:\n" +
                 currentTask+
                 "\nEnter new description:");
     }

@@ -60,6 +60,11 @@ public class TaskService {
         taskEntity.setCreationDate(LocalDateTime.now());
         return taskRepository.save(taskEntity);
     }
+
+    public void saveTaskList(List<TaskEntity> tasks){
+        taskRepository.saveAll(tasks);
+    }
+
     public void saveTaskOnList(List<String> tasks){
         List<TaskEntity> tasksToSave = new ArrayList<>();
         tasks.forEach(task -> {
@@ -84,9 +89,24 @@ public class TaskService {
         return true;
     }
 
+    public List<Integer> deleteTasks(List<Integer> ids,List<String> notFoud){
+        List<Integer> success = new ArrayList<>();
+        ids.forEach(id-> {
+            if (!taskExist(id)){
+                notFoud.add(String.valueOf(id));
+            }
+            success.add(id);
+        });
+        taskRepository.deleteAllById(ids);
+        return success;
+    }
+    public List<TaskEntity> getTaskById(List<Integer> ids){
+        return taskRepository.findAllById(ids);
+    }
     public boolean taskExist(int taskId){
         return taskRepository.existsById(taskId);
     }
+
     private String formatTaskText(TaskEntity task){
         return task.getIdTask()+","+task.getDescription()+","+task.getCreationDate();
     }

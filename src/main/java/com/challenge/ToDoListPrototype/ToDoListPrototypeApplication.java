@@ -1,6 +1,5 @@
 package com.challenge.ToDoListPrototype;
 
-import com.challenge.ToDoListPrototype.application.commandApp;
 import com.challenge.ToDoListPrototype.persistence.entity.TaskEntity;
 import com.challenge.ToDoListPrototype.service.TaskService;
 import com.challenge.ToDoListPrototype.utils.InputValidation;
@@ -9,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.validation.annotation.Validated;
-import org.w3c.dom.Text;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -48,25 +46,24 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 			String response = scan.nextLine();
 			if(InputValidation.isValidMenuOption(response, InputValidation.MAIN_MENU_REGEX, false))
 			{
-			switch (response){
-				case "I"://Parcial
-					insertItems();
-					break;
-				case "E":
-					editItems();
-					break;
-				case "R":
-					removeItems();
-					break;
-				case "P"://Parcial
-					printItems();
-					break;
-				case "X":
-					option=0;
-					break;
+				switch (response){
+					case "I"://total
+						insertItems();
+						break;
+					case "E"://Total
+						editItems();
+						break;
+					case "R"://total
+						removeItems();
+						break;
+					case "P"://Total
+						printItems();
+						break;
+					case "X"://Total
+						option=0;
+						break;
+				}
 			}
-			}
-
 		}while(option != 0);
 		scan.close();
 	}
@@ -93,38 +90,48 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 				}
 			}
 		}while(insertMore);
-
-		System.out.println("Task List description:"+tasksList.toString());
 		taskService.saveTaskOnList(tasksList);
 		System.out.println("Tasks Saved");
-		/*System.out.println("Task description:");
-		String task = scan.nextLine();
-		String saveResponse= taskService.saveNewTask(task).toString();
-		System.out.println(saveResponse);
-*/
 	}
 
 	public  void editItems(){
-		System.out.println("Task Id to Edit:");
-		String taskId = scan.nextLine();
-		int tskId = Integer.parseInt(taskId);
-		TaskEntity result =  taskService.getTask(tskId);
-		if(result!= null){
-			TextPresentationUtils.editTaskTemplateText(result.getDescription());
-			String newDescription = scan.nextLine();
-			result.setDescription(newDescription);
-			taskService.updateTask(result);
-		}
-		
+		String taskIds;
+		List<String> errorsId = new ArrayList<>();
+		TextPresentationUtils.createConsoleTitle("EDIT TASK OPTION");
+		System.out.println("Id to Edit\n" +
+				"(For edit more than One using ',' to separate ids):");
+		taskIds = scan.nextLine();
+		List<Integer> correctIds = InputValidation.validFormatTaskId(taskIds, errorsId);
+		List<TaskEntity> taskToEdit= taskService.getTaskById(correctIds);
+		taskToEdit.forEach(task -> {
+			TextPresentationUtils.editTaskTemplateText(task.getIdTask(),task.getDescription());
+			//String newDescription =
+			task.setDescription(scan.nextLine());
+			task.setCreationDate(LocalDateTime.now());
+		});
+		taskService.saveTaskList(taskToEdit);
 
 	}
 
 	public void removeItems(){
-		System.out.println("Ingrese el numero de la tarea a Eliminar:");
+		/*?System.out.println("Ingrese el numero de la tarea a Eliminar:");
 		//TODO Agregar validaciones para solo aceptar numero luego preguntar si desea salir o continuar
 		String taskId = scan.nextLine();
-		taskService.deleteTask(Integer.parseInt(taskId));
+		taskService.deleteTask(Integer.parseInt(taskId));*/
+		TextPresentationUtils.createConsoleTitle("REMOVE TASK OPTION");
+		System.out.println("Id to remove\n" +
+				"(For remove more than One using ',' to separate ids):");
+		String response = scan.nextLine();
+		List<String> errors = new ArrayList<>();
+		List<Integer> ids = InputValidation.validFormatTaskId(response, errors);
+		ids=taskService.deleteTasks(ids,errors);
+		System.out.println("Correct Deleted:"+ ids.toString());
+		System.out.println("Incorrect or Not found:"+ errors.toString());
+
+
 	}
+
+
 
 	public void printItems(){
 		String responseMenu;
