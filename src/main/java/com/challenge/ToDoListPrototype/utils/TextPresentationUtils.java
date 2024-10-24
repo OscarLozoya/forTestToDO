@@ -1,11 +1,10 @@
 package com.challenge.ToDoListPrototype.utils;
 
-import org.springframework.util.StringUtils;
-
 import java.util.List;
 
 public class TextPresentationUtils {
     private static final int CONSOLE_LENGTH=100;
+
     public static void presentDataList(List<String> listData, String separator) {
         //Title and Heads for the data view table
         createConsoleTitle("TO DO LIST");
@@ -21,7 +20,7 @@ public class TextPresentationUtils {
         }
         else
            createConsoleTitle("NO DATA");
-        System.out.println(String.format("%s","-".repeat(CONSOLE_LENGTH)));
+        singleLineDiv();
     }
 
     public static void editTaskTemplateText(int currentId,String currentTask){
@@ -36,5 +35,22 @@ public class TextPresentationUtils {
         int rightLength = lengthNeed- leftLength;
         String newTitle =String.format("%s %s %s","-".repeat(leftLength), title,"-".repeat(rightLength));
         System.out.println(newTitle);
+    }
+
+    public static void presentSummary(String action, String success, String errors){
+        createConsoleTitle("SUMMARY OF "+action.toUpperCase());
+        System.out.println("Correct "+ action +":"+ success);
+        System.out.println("Incorrect or Not found:"+ errors);
+        singleLineDiv();
+    }
+
+    public static void presentSingleSummary(String action, int success){
+        createConsoleTitle("SUMMARY OF "+action.toUpperCase());
+        System.out.println("Correct "+ action +":"+ success);
+        singleLineDiv();
+    }
+
+    public static void singleLineDiv(){
+        System.out.printf("%s%n","-".repeat(CONSOLE_LENGTH));
     }
 }

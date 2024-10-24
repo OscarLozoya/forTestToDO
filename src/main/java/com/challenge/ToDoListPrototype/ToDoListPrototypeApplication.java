@@ -1,42 +1,42 @@
 package com.challenge.ToDoListPrototype;
 
-import com.challenge.ToDoListPrototype.persistence.entity.TaskEntity;
-import com.challenge.ToDoListPrototype.service.TaskService;
-import com.challenge.ToDoListPrototype.utils.InputValidation;
-import com.challenge.ToDoListPrototype.utils.TextPresentationUtils;
+import com.challenge.ToDoListPrototype.app.MainApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 @SpringBootApplication
 public class ToDoListPrototypeApplication implements CommandLineRunner {
 
-	public static Scanner scan;
 	@Autowired
-	private TaskService taskService;
+	private MainApp mainApp;
+	/*public static Scanner scan;
+	@Autowired
+	private MenuDisplayUtils menuDisplay;
+	@Autowired
+	private TaskService taskService;*/
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(ToDoListPrototypeApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		menuCommandLine();
+		mainApp.menuCommandLine();
+		//menuCommandLine();
 	}
 
-	public void menuCommandLine(){
+	//Method for display the Main Menu
+	/*public void menuCommandLine(){
 		scan = new Scanner(System.in);
 		int option = 1;
 		do{
 			printAllItems();
-			System.out.println("OPTIONS:");
+			//TODO
+			//respone = MenuUtils.printMainMenu(scan);
+			String response = menuDisplay.displayMainMenu();
+			/*System.out.println("OPTIONS:");
 			System.out.println("Insert Items (Press I)\n" +
 					"Edit Item (Press E)\n" +
 					"Remove Items (Press R)\n" +
@@ -66,9 +66,10 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 			}
 		}while(option != 0);
 		scan.close();
-	}
+	}*/
 
-	public void insertItems(){
+	//Method to manage insertions, uses a Do while cycle to admit multiple insertions with interactive message to continue
+	/*public void insertItems(){
 		boolean insertMore = true;
 		String responseMenu;
 		List<String> tasksList = new ArrayList<>();
@@ -76,9 +77,12 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 		System.out.println("Task description:");
 		tasksList.add(scan.nextLine());
 		do{
-			System.out.println("Add another task? Y/N:");
-			responseMenu = scan.nextLine();
-			if(InputValidation.isValidMenuOption(responseMenu,InputValidation.YN_MENU_REGEX,false)){
+			responseMenu = menuDisplay.displayYesOrNotMenu();
+			/*System.out.println("Add another task? Y/N:");
+			responseMenu = scan.nextLine();*/
+			//todo
+			//responseMunu = printYesNoMenu(scan);
+	/*		if(InputValidation.isValidMenuOption(responseMenu,InputValidation.YN_MENU_REGEX,  false)){
 				switch(responseMenu){
 					case "Y":
 						System.out.println("Task description:");
@@ -92,59 +96,54 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 		}while(insertMore);
 		taskService.saveTaskOnList(tasksList);
 		System.out.println("Tasks Saved");
-	}
+	}*/
 
-	public  void editItems(){
+    //Method to Allowed Edit Items, it's possible
+	/*public  void editItems(){
+		/*
+		//TextPresentationUtils.createConsoleTitle("EDIT TASK OPTION");
 		String taskIds;
-		List<String> errorsId = new ArrayList<>();
-		TextPresentationUtils.createConsoleTitle("EDIT TASK OPTION");
 		System.out.println("Id to Edit\n" +
 				"(For edit more than One using ',' to separate ids):");
-		taskIds = scan.nextLine();
+		taskIds = scan.nextLine();*/
+	/*	List<String> errorsId = new ArrayList<>();
+		String taskIds = menuDisplay.displayEditMenu();
 		List<Integer> correctIds = InputValidation.validFormatTaskId(taskIds, errorsId);
-		List<TaskEntity> taskToEdit= taskService.getTaskById(correctIds);
+		List<TaskEntity> taskToEdit = taskService.getTaskById(correctIds);
 		taskToEdit.forEach(task -> {
 			TextPresentationUtils.editTaskTemplateText(task.getIdTask(),task.getDescription());
 			//String newDescription =
 			task.setDescription(scan.nextLine());
-			task.setCreationDate(LocalDateTime.now());
+			task.setDate(LocalDateTime.now());
 		});
+		//TODO ADD MESSAGES
+
 		taskService.saveTaskList(taskToEdit);
 
-	}
+	}*/
 
-	public void removeItems(){
-		/*?System.out.println("Ingrese el numero de la tarea a Eliminar:");
-		//TODO Agregar validaciones para solo aceptar numero luego preguntar si desea salir o continuar
-		String taskId = scan.nextLine();
-		taskService.deleteTask(Integer.parseInt(taskId));*/
-		TextPresentationUtils.createConsoleTitle("REMOVE TASK OPTION");
+	/*public void removeItems(){
+
+		/*TextPresentationUtils.createConsoleTitle("REMOVE TASK OPTION");
 		System.out.println("Id to remove\n" +
 				"(For remove more than One using ',' to separate ids):");
 		String response = scan.nextLine();
+		*/
+	/*	String taskIds = menuDisplay.displayRemoveMenu();
 		List<String> errors = new ArrayList<>();
-		List<Integer> ids = InputValidation.validFormatTaskId(response, errors);
+		List<Integer> ids = InputValidation.validFormatTaskId(taskIds, errors);
 		ids=taskService.deleteTasks(ids,errors);
 		System.out.println("Correct Deleted:"+ ids.toString());
 		System.out.println("Incorrect or Not found:"+ errors.toString());
-
-
-	}
+	}*/
 
 
 
-	public void printItems(){
+	/*public void printItems(){
 		String responseMenu;
 		boolean printMenu = true;
 		do{
-			TextPresentationUtils.createConsoleTitle("SHOW ITEMS OPTIONS");
-			System.out.println("Show task order by \n" +
-					"Item Id Ascend (Press IA)\n" +
-					"Item Id Descend (Press ID)\n"+
-					"Date Ascend (Press DA)\n" +
-					"Descend (Press DD)\n" +
-					"Main menu (Press X)");
-			responseMenu = scan.nextLine();
+			responseMenu = menuDisplay.displayPrintOptions();
 			if(InputValidation.isValidMenuOption( responseMenu, InputValidation.MENU_PRINT_REGEX, false)){
 				switch(responseMenu){
 					case "IA":
@@ -166,11 +165,11 @@ public class ToDoListPrototypeApplication implements CommandLineRunner {
 			}
 
 		}while(printMenu);
-	}
-
+	}*/
+/*
 	public void printAllItems(){
 		TextPresentationUtils.presentDataList( taskService.getAllTaskText(), ",");
-	}
+	}*/
 
 
 }

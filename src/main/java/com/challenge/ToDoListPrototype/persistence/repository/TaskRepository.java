@@ -8,6 +8,6 @@ import java.util.List;
 public interface TaskRepository extends ListCrudRepository<TaskEntity, Integer> {
     List<TaskEntity> findAllByOrderByIdTaskAsc();
     List<TaskEntity> findAllByOrderByIdTaskDesc();
-    List<TaskEntity> findAllByOrderByCreationDateAsc();
-    List<TaskEntity> findAllByOrderByCreationDateDesc();
+    List<TaskEntity> findAllByOrderByDateAsc();
+    List<TaskEntity> findAllByOrderByDateDesc();
 }

@@ -1,9 +1,7 @@
 package com.challenge.ToDoListPrototype.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.time.LocalDateTime;
 
@@ -16,7 +14,7 @@ public class TaskEntity {
     @Column(nullable = false, length = 70)
     private String description;
     @Column(nullable = false, columnDefinition = "DATETIME")
-    private LocalDateTime creationDate;
+    private LocalDateTime date;
 
     public Integer getIdTask() {
         return idTask;
@@ -34,17 +32,17 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setDate(LocalDateTime creationDate) {
+        this.date = creationDate;
     }
 
     public TaskEntity(){}
     public TaskEntity(String taskDescription, LocalDateTime date){
         this.description = taskDescription;
-        this.creationDate = date;
+        this.date = date;
     }
 }
